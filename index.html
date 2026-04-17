@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELITE DASHBOARD</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="logoTitle">
+            <img src="assets/logo.png" class="logo">
+            <h1>ELITE DASHBOARD</h1>
+        </div>
+
+        <nav id="navMenu">
+            <button onclick="changeSection('general',this)" class="active">General</button>
+            <button onclick="changeSection('stock',this)">Stock</button>
+            <button onclick="changeSection('perfumes',this)">Perfumes</button>
+            <button onclick="changeSection('oro',this)">Oro</button>
+            <button onclick="changeSection('prestamos',this)">Préstamos</button>
+            <button onclick="changeSection('contado',this)">Ventas contado</button>
+        </nav>
+    </header>
+
+    <section id="generalDashboard" class="generalNumbers">
+        <div class="metricBox">
+            <h3>Ganancia Total</h3>
+            <p id="gananciaTotal">₡0</p>
+        </div>
+        <div class="metricBox">
+            <h3>Capital por Recuperar</h3>
+            <p id="capitalTotal">₡0</p>
+        </div>
+        <div class="metricBox">
+            <h3>Abonos del Mes</h3>
+            <p id="abonosMes">₡0</p>
+        </div>
+        <div class="metricBox reservaCard" style="position: relative;">
+            <h3>Re-Inversión (30%)</h3>
+            <p id="reservaMensual">₡0</p>
+            <button onclick="utilizarReserva()" style="margin-top: 8px; font-size: 0.75em; cursor: pointer; background: #2ecc71; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-weight: bold;">
+                Usar Re-Inversión
+            </button>
+        </div>
+        <div class="metricBox">
+            <h3>Ganancia Ventas Contado</h3>
+            <p id="gananciaContado">₡0</p>
+        </div>
+        <div class="metricBox">
+            <h3>Stock</h3>
+            <p id="stockTotalDashboard">₡0</p>
+        </div>
+        <div class="metricBox">
+            <h3>Clientes</h3>
+            <p id="clientesUnicos">0</p>
+        </div>
+        <div class="metricBox">
+            <h3>Patrimonio</h3>
+            <p id="interesCompuesto">₡0</p>
+        </div>
+    </section>
+
+    <div id="prestamosDashboard">
+        <h2 style="text-align:center;margin-top:20px;">Préstamos</h2>
+        <section class="generalNumbers">
+            <div class="metricBox">
+                <h3>Capital Total</h3>
+                <p id="prestamoCapital">₡0</p>
+            </div>
+            <div class="metricBox">
+                <h3>Ganancia Total</h3>
+                <p id="prestamoGanancia">₡0</p>
+            </div>
+            <div class="metricBox">
+                <h3>Abonos Totales</h3>
+                <p id="prestamoAbonos">₡0</p>
+            </div>
+        </section>
+    </div>
+
+    <section id="formSection" class="formSection">
+        <form id="clientForm">
+            <input type="text" id="fecha" placeholder="Fecha" required onfocus="this.type='date'" onblur="if(!this.value)this.type='text'">
+
+            <input type="text" id="nombre" placeholder="Cliente">
+            <input type="text" id="producto" placeholder="Producto">
+            <input type="number" id="costo" placeholder="Costo producto">
+            <input type="number" id="precio" placeholder="Precio venta">
+            <input type="number" id="prima" placeholder="Prima">
+            <input type="text" id="whatsapp" placeholder="Whatsapp">
+            <input type="number" id="prestamo" placeholder="Monto préstamo">
+
+            <input type="text" id="nombrePerfume" placeholder="Nombre del Perfume" style="display:none;">
+            <input type="number" id="cantidadStock" placeholder="Cantidad" style="display:none;">
+            <input type="number" id="costoStock" placeholder="Costo por unidad" style="display:none;">
+            <input type="text" id="proveedorStock" placeholder="Proveedor" style="display:none;">
+
+            <select id="tipoPrestamo">
+                <option value="20">20% (5 cuotas)</option>
+                <option value="5">5% (indefinido)</option>
+            </select>
+
+            <button type="submit" id="btnRegistrar">Registrar</button>
+        </form>
+    </section>
+
+    <section id="tableSection" class="tableSection">
+        <table>
+            <thead id="tableHead"></thead>
+            <tbody id="clientTable"></tbody>
+        </table>
+        <div id="resumenStockContainer" style="display:none;"></div>
+    </section>
+
+    <div id="saldoCardContainer" class="saldoOverlay" style="display: none;">
+        <div class="saldoCard">
+            <button class="saldoClose" onclick="cerrarSaldo()">X</button>
+            <div class="saldoRow">
+                <span>📅 Fecha último abono:</span>
+                <strong id="saldoFecha"></strong>
+            </div>
+            <div class="saldoRow">
+                <span>💰 Monto último abono:</span>
+                <strong class="saldoGreen" id="saldoUltimo"></strong>
+            </div>
+            <div class="saldoRow">
+                <span>⚠️ Saldo pendiente:</span>
+                <strong class="saldoRed" id="saldoPendiente"></strong>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
