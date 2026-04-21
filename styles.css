@@ -149,11 +149,111 @@ form button:active {
     background: #c29501;
 }
 
+.pedidoButtons {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.pedidoButtons button {
+    grid-column: auto;
+    margin: 0;
+}
+
+#btnAgregarPedidoItem {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+}
+
+.pedidoDraftContainer {
+    grid-column: 1 / -1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.pedidoDraftHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.pedidoDraftHeader h3,
+.pedidoDraftHeader p {
+    margin: 0;
+}
+
+.pedidoDraftList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pedidoDraftItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.pedidoDraftItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.pedidoDraftItem small,
+.pedidoDraftEmpty {
+    color: #8b949e;
+}
+
+.pedidoDraftItemActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pedidoDraftItemActions span {
+    color: #3fb950;
+    font-weight: 700;
+}
+
+.pedidoDraftItemActions button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
 /* ===== TABLA ===== */
 .tableSection { 
     background: transparent; 
     padding: 10px; 
     overflow-x: auto;
+}
+
+.tableSearchWrap {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 14px;
+}
+
+#tableSearchInput {
+    width: min(360px, 100%);
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 10px;
+    color: #10171f;
+    font-weight: 600;
 }
 
 table { 
@@ -178,16 +278,19 @@ td {
 
 /* ===== BOTONES ACCIÓN ===== */
 .actionBtn { 
-    padding: 8px 12px; 
-    margin: 2px; 
+    padding: 5px 8px; 
+    margin: 0; 
     border: none; 
     cursor: pointer; 
     border-radius: 6px; 
     font-weight: bold; 
     white-space: nowrap;
+    font-size: 0.8rem;
+    line-height: 1.1;
 }
 
 .abonoBtn { background: #27ae60; color: white; }
+.whatsappBtn { background: #e1ad01; color: white; }
 .saldoBtn { background: #16a084; color: white; }
 .editBtn { background: #2980b9; color: white; }
 .deleteBtn { background: #e74c3c; color: white; }
@@ -197,11 +300,17 @@ td {
     justify-content: center;
     align-items: center;
     gap: 6px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .accionesBtns .actionBtn {
     margin: 0;
+    min-width: 0;
+}
+
+.deleteBtn {
+    padding: 5px 8px;
+    min-width: 34px;
 }
 
 /* =========================================
@@ -227,7 +336,9 @@ td {
     border-radius: 20px;
     border: 1px solid #30363d;
     width: 90%;
-    max-width: 400px;
+    max-width: 460px;
+    max-height: 85vh;
+    overflow-y: auto;
     position: relative;
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
@@ -259,6 +370,80 @@ td {
 .saldoRow strong { font-size: 1.1em; }
 .saldoGreen { color: #3fb950; }
 .saldoRed { color: #ffffff; }
+
+.saldoActions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.saldoHistoryBtn {
+    padding: 10px 14px;
+    background: #e1ad01;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(225, 173, 1, 0.2);
+}
+
+.saldoHistoryBox {
+    margin-top: 18px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+}
+
+.saldoHistoryBox h4 {
+    margin: 0 0 12px 0;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.saldoHistoryList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.saldoHistoryItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.saldoHistoryItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.saldoHistoryItem strong {
+    display: block;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.saldoHistoryItem small {
+    display: block;
+    margin-top: 4px;
+    color: #8b949e;
+}
+
+.saldoHistoryItem span {
+    color: #3fb950;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.saldoHistoryEmpty {
+    color: #8b949e;
+    font-size: 0.95rem;
+}
 
 /* =========================================
    SISTEMA DE STOCK MINIMALISTA (ACTUALIZADO)
@@ -351,6 +536,35 @@ td {
     #resumenStockContainer .metricBox {
         width: 100% !important;
     }
+
+    .pedidoButtons {
+        grid-template-columns: 1fr;
+    }
+
+    .pedidosToolbar,
+    .pedidoDraftHeader,
+    .pedidosResumenCard,
+    .pedidoCardTop,
+    .pedidoMeta,
+    .pedidoTotalRow,
+    .pedidoItemRow {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pedidosFilterBox {
+        width: 100%;
+    }
+
+    .tableSearchWrap {
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+
+    #tableSearchInput {
+        width: 100%;
+        max-width: 420px;
+    }
 }
 
 /* =========================================
@@ -390,4 +604,179 @@ td {
 /* TABLA MÁS COMPACTA */
 .tableSection table td {
     white-space: nowrap;
+}
+
+.pedidosContainer {
+    display: none;
+    width: 100%;
+}
+
+.pedidosToolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.pedidosToolbar h2,
+.pedidosToolbar p {
+    margin: 0;
+}
+
+.pedidosToolbar p,
+.pedidosFilterBox label {
+    color: #8b949e;
+}
+
+.pedidosFilterBox {
+    min-width: 220px;
+}
+
+.pedidosFilterBox input {
+    width: 100%;
+    margin-top: 6px;
+}
+
+.pedidosResumenCard {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.16), rgba(255,255,255,0.03));
+    border: 1px solid rgba(39, 174, 96, 0.32);
+    border-radius: 18px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.pedidosResumenCard span {
+    color: #d8f3e1;
+}
+
+.pedidosResumenCard strong {
+    font-size: 1.35rem;
+    color: #d7ffe6;
+}
+
+.pedidosCardsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+.pedidoCardVoucher {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+}
+
+.pedidoCardTop,
+.pedidoMeta,
+.pedidoTotalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+}
+
+.pedidoProveedor {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.pedidoNumero {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+.pedidoMeta {
+    margin: 18px 0;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.pedidoMeta div span {
+    display: block;
+    color: #8b949e;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.pedidoItemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pedidoItemRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.pedidoExpandBtn {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: transparent;
+    color: #f4c545;
+    border: 1px solid rgba(244, 197, 69, 0.28);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.pedidoCardActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.pedidoActionBtn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.pedidoEditBtn {
+    background: #2980b9;
+}
+
+.pedidoAddBtn {
+    background: #27ae60;
+}
+
+.pedidoTotalRow {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.pedidoTotalRow span {
+    color: #8b949e;
+}
+
+.pedidoTotalRow strong {
+    font-size: 1.3rem;
+}
+
+.pedidoEmptyState {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 28px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #8b949e;
 }
