@@ -631,6 +631,7 @@ async function deleteClient(id) {
 }
 
 function updateGeneral() {
+    const CAPITAL_PRESTAMOS_BASE = 150000;
     let gT = 0, cT = 0, aM = 0, primasMes = 0, gC = 0, pGan = 0, pAbo = 0;
     let saldoPrestamosActual = 0;
 
@@ -683,8 +684,9 @@ function updateGeneral() {
     });
 
     let sTotal = stockData.reduce((acc, i) => acc + (Number(i.cantidad) * Number(i.costo_unidad)), 0);
-    let capitalPrestamosTotal = saldoPrestamosActual + cajaPrestamos;
-    let patrimonioCalculo = gT + cT + capitalPrestamosTotal + sTotal;
+    let patrimonioPrestamos = saldoPrestamosActual + cajaPrestamos;
+    let capitalPrestamosTotal = CAPITAL_PRESTAMOS_BASE + pGan;
+    let patrimonioCalculo = gT + cT + patrimonioPrestamos + sTotal;
 
     const clientesUnicosSet = new Set();
 
