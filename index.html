@@ -25,6 +25,7 @@
             <button onclick="changeSection('oro',this)">Oro</button>
             <button onclick="changeSection('prestamos',this)">Prestamos</button>
             <button onclick="changeSection('contado',this)">Ventas contado</button>
+            <button onclick="changeSection('gastos',this)">Gastos</button>
         </nav>
     </header>
 
@@ -59,6 +60,10 @@
         <div class="metricBox">
             <h3>Stock</h3>
             <p id="stockTotalDashboard">0</p>
+        </div>
+        <div class="metricBox gastoMetric">
+            <h3>Gastos del Mes</h3>
+            <p id="gastosMesTotal">0</p>
         </div>
         <div class="metricBox">
             <h3>Clientes</h3>
@@ -148,11 +153,11 @@
         <div class="saldoCard">
             <button class="saldoClose" onclick="cerrarSaldo()">X</button>
             <div class="saldoRow">
-                <span>Fecha último abono:</span>
+                <span>Fecha ultimo abono:</span>
                 <strong id="saldoFecha"></strong>
             </div>
             <div class="saldoRow">
-                <span>Monto último abono:</span>
+                <span>Monto ultimo abono:</span>
                 <strong class="saldoGreen" id="saldoUltimo"></strong>
             </div>
             <div class="saldoRow">
@@ -173,6 +178,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
-
-

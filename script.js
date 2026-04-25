@@ -137,7 +137,7 @@ function toggleSectionExtras() {
         else pedidosWrap.style.display = "none";
     }
 
-    const canSearchTable = ["perfumes", "oro", "prestamos", "contado"].includes(section);
+    const canSearchTable = ["perfumes", "oro", "prestamos", "contado", "gastos"].includes(section);
     if (tableSearchWrap) {
         tableSearchWrap.style.display = canSearchTable ? "flex" : "none";
     }
@@ -145,6 +145,8 @@ function toggleSectionExtras() {
         if (!canSearchTable) {
             tableSearchTerm = "";
             tableSearchInput.value = "";
+        } else {
+            tableSearchInput.placeholder = section === "gastos" ? "Buscar gasto por comercio o detalle" : "Buscar cliente por nombre";
         }
     }
 
@@ -395,13 +397,28 @@ function adjustForm() {
     const isPrestamo = section === "prestamos";
     const isContado = section === "contado";
     const isPedidos = section === "pedidos";
+    const isGastos = section === "gastos";
 
-    document.getElementById("nombre").style.display = (isStock || isPedidos) ? "none" : "block";
-    document.getElementById("producto").style.display = (isPrestamo || isStock || isPedidos) ? "none" : "block";
-    document.getElementById("costo").style.display = (isPrestamo || isStock || isPedidos) ? "none" : "block";
-    document.getElementById("precio").style.display = (isPrestamo || isStock || isPedidos) ? "none" : "block";
-    document.getElementById("prima").style.display = (isContado || isPrestamo || isStock || isPedidos) ? "none" : "block";
-    document.getElementById("whatsapp").style.display = (isContado || isStock || isPedidos) ? "none" : "block";
+    const nombreInput = document.getElementById("nombre");
+    const productoInput = document.getElementById("producto");
+    const costoInput = document.getElementById("costo");
+    const precioInput = document.getElementById("precio");
+    const primaInput = document.getElementById("prima");
+    const whatsappInput = document.getElementById("whatsapp");
+
+    nombreInput.placeholder = isGastos ? "Nombre del comercio" : "Cliente";
+    productoInput.placeholder = isGastos ? "Detalle del gasto" : "Producto";
+    costoInput.placeholder = isGastos ? "Monto del gasto" : "Costo producto";
+    precioInput.placeholder = "Precio venta";
+    primaInput.placeholder = "Prima";
+    whatsappInput.placeholder = "Whatsapp";
+
+    nombreInput.style.display = (isStock || isPedidos) ? "none" : "block";
+    productoInput.style.display = (isPrestamo || isStock || isPedidos) ? "none" : "block";
+    costoInput.style.display = (isPrestamo || isStock || isPedidos) ? "none" : "block";
+    precioInput.style.display = (isPrestamo || isStock || isPedidos || isGastos) ? "none" : "block";
+    primaInput.style.display = (isContado || isPrestamo || isStock || isPedidos || isGastos) ? "none" : "block";
+    whatsappInput.style.display = (isContado || isStock || isPedidos || isGastos) ? "none" : "block";
     document.getElementById("prestamo").style.display = isPrestamo ? "block" : "none";
     document.getElementById("tipoPrestamo").style.display = isPrestamo ? "block" : "none";
 
@@ -595,6 +612,39 @@ document.getElementById("clientForm").addEventListener("submit", async (e) => {
         return;
     }
 
+    if (section === "gastos") {
+        const gasto = {
+            id: Date.now(),
+            section,
+            fecha: document.getElementById("fecha").value,
+            nombre: (document.getElementById("nombre").value || "").trim(),
+            producto: (document.getElementById("producto").value || "").trim(),
+            costo: Number(document.getElementById("costo").value) || 0,
+            precio: 0,
+            prima: 0,
+            prestamo: 0,
+            whatsapp: "",
+            abonado: 0,
+            ultimoAbono: 0,
+            fechaUltimoAbono: "",
+            cuota: "",
+            interes: 0,
+            totalPrestamo: 0
+        };
+
+        if (!gasto.fecha || !gasto.nombre || gasto.costo <= 0) {
+            alert("Completa fecha, comercio y monto del gasto.");
+            return;
+        }
+
+        clients.unshift(gasto);
+        await saveToSupabase(gasto);
+        save();
+        renderTable();
+        e.target.reset();
+        return;
+    }
+
     let monto = Number(document.getElementById("prestamo").value) || 0;
     let t = document.getElementById("tipoPrestamo").value;
     let inter = 0, ct = 0, tot = 0;
@@ -665,16 +715,39 @@ async function renderTable() {
 
     if (section === "prestamos") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Prestamo</th><th>Cuotas</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
     else if (section === "contado") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Ganancia</th><th>Acciones</th></tr>`;
+    else if (section === "gastos") thead.innerHTML = `<tr><th>Fecha</th><th>Comercio</th><th>Detalle</th><th>Monto</th><th>Acciones</th></tr>`;
     else thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Prima</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
 
     const filteredClients = clients.filter(c => {
         if (!c || c.section !== section) return false;
         if (!tableSearchTerm) return true;
         const nombre = (c.nombre || "").trim().toLowerCase();
-        return nombre.includes(tableSearchTerm);
+        const producto = (c.producto || "").trim().toLowerCase();
+        return nombre.includes(tableSearchTerm) || (section === "gastos" && producto.includes(tableSearchTerm));
     });
 
     for (const c of filteredClients) {
+        if (section === "gastos") {
+            let tr = document.createElement("tr");
+            if (isMobile) {
+                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
+                    <div style="text-align: center; color: white; margin-bottom: 12px;">
+                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin comercio"}</strong><br>
+                        <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
+                        <div class="mobileCard"><small>DETALLE</small><br><span>${c.producto || "-"}</span></div>
+                        <div class="mobileCard gastoMobileAmount"><small>MONTO</small><br><span>${formatCRC(c.costo)}</span></div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
+                </td>`;
+            } else {
+                tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td class="gastoAmount">${formatCRC(c.costo)}</td><td>${actionButtons(c.id)}</td>`;
+            }
+            tbody.appendChild(tr);
+            continue;
+        }
+
         let saldo = c.section === "prestamos"
             ? (c.totalPrestamo || 0) - (c.abonado || 0)
             : (c.precio || 0) - (c.prima || 0) - (c.abonado || 0);
@@ -1047,7 +1120,7 @@ async function eliminarStock(id) {
 }
 
 function actionButtons(id) {
-    if (section === "contado") {
+    if (section === "contado" || section === "gastos") {
         return `
             <div class="accionesBtns">
                 <button class="actionBtn deleteBtn" onclick="deleteClient(${id})">X</button>
@@ -1264,6 +1337,7 @@ function updateGeneral() {
     let gT = 0, cT = 0, aM = 0, primasMes = 0, gC = 0, pGan = 0, pAbo = 0;
     let saldoPrestamosActual = 0;
     let pedidosMes = 0;
+    let gastosMes = 0;
 
     const hoyCR = getCRDate();
     const mesActual = hoyCR.getMonth();
@@ -1287,6 +1361,13 @@ function updateGeneral() {
                 const fRegistro = new Date(c.fecha + "T12:00:00");
                 if (fRegistro.getMonth() === mesActual && fRegistro.getFullYear() === anioActual) {
                     gC += (valPrecio - valCosto);
+                }
+            }
+        } else if (c.section === "gastos") {
+            if (c.fecha) {
+                const fRegistro = new Date(c.fecha + "T12:00:00");
+                if (fRegistro.getMonth() === mesActual && fRegistro.getFullYear() === anioActual) {
+                    gastosMes += valCosto;
                 }
             }
         } else {
@@ -1356,6 +1437,9 @@ function updateGeneral() {
     document.getElementById("pedidosMesTotal").innerText = formatCRC(pedidosMes);
     document.getElementById("gananciaContado").innerText = formatCRC(gC);
 
+    const gastosDash = document.getElementById("gastosMesTotal");
+    if (gastosDash) gastosDash.innerText = formatCRC(gastosMes);
+
     const stockDash = document.getElementById("stockTotalDashboard");
     if (stockDash) stockDash.innerText = formatCRC(sTotal);
 
@@ -1397,6 +1481,9 @@ async function exportPDF() {
             const vStock = document.getElementById("stockTotalDashboard")
                 ? formatPDF(document.getElementById("stockTotalDashboard").innerText.replace(/[₡,\s]/g, ""))
                 : "0";
+            const vGastos = document.getElementById("gastosMesTotal")
+                ? formatPDF(document.getElementById("gastosMesTotal").innerText.replace(/[₡,\s]/g, ""))
+                : "0";
             const vClientes = document.getElementById("clientesUnicos")
                 ? document.getElementById("clientesUnicos").innerText
                 : "0";
@@ -1416,6 +1503,7 @@ async function exportPDF() {
                     ["Reserva Disponible (30%)", vReserva],
                     ["Ganancia Ventas Contado", vGananciaContado],
                     ["Total en Stock", vStock],
+                    ["Gastos del Mes", vGastos],
                     ["Clientes Unicos", vClientes],
                     ["Patrimonio (Ganancia + Calle)", vPatrimonio],
                     ["[Prestamos] Capital Invertido", vPreCap],
@@ -1527,6 +1615,25 @@ async function exportPDF() {
                     }
                 });
             });
+        } else if (section === "gastos") {
+            head = [["Fecha", "Comercio", "Detalle", "Monto"]];
+            clients.filter(c => c && c.section === "gastos").forEach(c => {
+                bodyData.push([
+                    c.fecha || "-",
+                    c.nombre || "-",
+                    c.producto || "-",
+                    formatPDF(c.costo)
+                ]);
+            });
+
+            doc.autoTable({
+                startY: 30,
+                head: head,
+                body: bodyData,
+                theme: "grid",
+                headStyles: { fillColor: [184, 134, 11] },
+                styles: { fontSize: 8 }
+            });
         } else if (section === "contado") {
             head = [["Fecha", "Cliente", "Producto", "Costo", "Precio", "Ganancia"]];
             clients.filter(c => c && c.section === "contado").forEach(c => {
@@ -1623,6 +1730,3 @@ async function exportPDF() {
         alert("Error al generar el PDF.");
     }
 }
-
-
-

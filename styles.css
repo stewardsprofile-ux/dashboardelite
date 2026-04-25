@@ -295,6 +295,18 @@ td {
 .editBtn { background: #2980b9; color: white; }
 .deleteBtn { background: #e74c3c; color: white; }
 
+.gastoMetric {
+    border-color: rgba(231, 76, 60, 0.28);
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.12), rgba(255,255,255,0.03));
+}
+
+.gastoMetric p,
+.gastoAmount,
+.gastoMobileAmount span {
+    color: #ffb3ad;
+    font-weight: 800;
+}
+
 .accionesBtns {
     display: flex;
     justify-content: center;
