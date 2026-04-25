@@ -1,5 +1,5 @@
 const GRAPH_BASE_URL = "https://graph.microsoft.com/v1.0";
-const TOKEN_URL = (tenantId) => `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+const TOKEN_URL = (authority) => `https://login.microsoftonline.com/${authority}/oauth2/v2.0/token`;
 
 function requiredEnv(name) {
     const value = process.env[name];
@@ -15,6 +15,11 @@ function getBaseUrl(req) {
 
 function getRedirectUri(req) {
     return process.env.MICROSOFT_REDIRECT_URI || `${getBaseUrl(req)}/api/outlook-auth-callback`;
+}
+
+function getMicrosoftAuthority() {
+    // Personal Microsoft accounts (hotmail/outlook/live) work more reliably through common.
+    return process.env.MICROSOFT_AUTHORITY || "common";
 }
 
 async function fetchJson(url, options = {}) {
@@ -40,7 +45,7 @@ async function exchangeCodeForTokens(req, code) {
         scope: "offline_access User.Read Mail.Read"
     });
 
-    return fetchJson(TOKEN_URL(requiredEnv("MICROSOFT_TENANT_ID")), {
+    return fetchJson(TOKEN_URL(getMicrosoftAuthority()), {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: params
@@ -56,7 +61,7 @@ async function getAccessTokenFromRefreshToken() {
         scope: "offline_access User.Read Mail.Read"
     });
 
-    const tokens = await fetchJson(TOKEN_URL(requiredEnv("MICROSOFT_TENANT_ID")), {
+    const tokens = await fetchJson(TOKEN_URL(getMicrosoftAuthority()), {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: params
@@ -278,6 +283,7 @@ module.exports = {
     fetchJson,
     exchangeCodeForTokens,
     getAccessTokenFromRefreshToken,
+    getMicrosoftAuthority,
     getRedirectUri,
     getBaseUrl,
     extractDebitCardPurchase,

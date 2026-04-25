@@ -28,6 +28,7 @@ Agrega estas variables en Vercel > Project > Settings > Environment Variables:
 ```text
 MICROSOFT_CLIENT_ID=e1f3809d-9451-4121-ace4-10e56321dfd8
 MICROSOFT_TENANT_ID=e323f46a-7b72-4409-9049-b1db6d72abd4
+MICROSOFT_AUTHORITY=common
 MICROSOFT_CLIENT_SECRET=valor_del_secreto_de_azure
 MICROSOFT_REDIRECT_URI=https://dashboardelite.vercel.app/api/outlook-auth-callback
 OUTLOOK_WEBHOOK_CLIENT_STATE=un_texto_largo_aleatorio
@@ -35,6 +36,8 @@ OUTLOOK_WEBHOOK_URL=https://dashboardelite.vercel.app/api/outlook-webhook
 SUPABASE_URL=https://wpcsqjcaxxckldwfwsrn.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=service_role_key_de_supabase
 ```
+
+Para correos personales `hotmail.com`, `outlook.com` o `live.com`, `MICROSOFT_AUTHORITY` debe ser `common`.
 
 Despues de tener esas variables, haz redeploy y abre:
 

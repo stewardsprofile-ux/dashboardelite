@@ -1,4 +1,4 @@
-const { getRedirectUri, requiredEnv } = require("./outlook-shared");
+const { getMicrosoftAuthority, getRedirectUri, requiredEnv } = require("./outlook-shared");
 
 module.exports = async function handler(req, res) {
     try {
@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
         });
 
         res.writeHead(302, {
-            location: `https://login.microsoftonline.com/${requiredEnv("MICROSOFT_TENANT_ID")}/oauth2/v2.0/authorize?${params}`
+            location: `https://login.microsoftonline.com/${getMicrosoftAuthority()}/oauth2/v2.0/authorize?${params}`
         });
         res.end();
     } catch (err) {
