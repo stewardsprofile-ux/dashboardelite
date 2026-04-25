@@ -1424,6 +1424,7 @@ function updateGeneral() {
     let reservaBruta = (aM * 0.30) + (gC * 0.30);
     let reservaDisponible = reservaBruta - reservaGastadaGlobal;
     reservaDisponible = Math.round(reservaDisponible / 500) * 500;
+    reservaDisponible = Math.max(0, reservaDisponible);
 
     document.getElementById("gananciaTotal").innerText = formatCRC(gT);
     document.getElementById("capitalTotal").innerText = formatCRC(cT);

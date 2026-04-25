@@ -307,6 +307,67 @@ td {
     font-weight: 800;
 }
 
+.positiveMetric {
+    border-color: rgba(46, 204, 113, 0.3);
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.13), rgba(255,255,255,0.03));
+}
+
+.positiveMetric p {
+    color: #b8ffd3;
+    font-weight: 800;
+}
+
+.goldMetric {
+    border-color: rgba(255, 215, 0, 0.58);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.14), rgba(255,255,255,0.03));
+    box-shadow: 0 10px 22px rgba(0,0,0,0.2), 0 0 18px rgba(255, 215, 0, 0.08);
+}
+
+.goldMetric p {
+    color: #ffe55c;
+    font-weight: 800;
+}
+
+.yellowMetric {
+    border-color: rgba(225, 173, 1, 0.46);
+    background: linear-gradient(135deg, rgba(225, 173, 1, 0.14), rgba(255,255,255,0.03));
+}
+
+.yellowMetric p {
+    color: #ffd76a;
+    font-weight: 800;
+}
+
+.orangeMetric {
+    border-color: rgba(243, 156, 18, 0.4);
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.14), rgba(255,255,255,0.03));
+}
+
+.orangeMetric p {
+    color: #ffc078;
+    font-weight: 800;
+}
+
+.blueMetric {
+    border-color: rgba(52, 152, 219, 0.4);
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.14), rgba(255,255,255,0.03));
+}
+
+.blueMetric p {
+    color: #9bd7ff;
+    font-weight: 800;
+}
+
+.skyMetric {
+    border-color: rgba(93, 213, 255, 0.42);
+    background: linear-gradient(135deg, rgba(93, 213, 255, 0.14), rgba(255,255,255,0.03));
+}
+
+.skyMetric p {
+    color: #b9efff;
+    font-weight: 800;
+}
+
 .accionesBtns {
     display: flex;
     justify-content: center;
