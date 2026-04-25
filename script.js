@@ -730,16 +730,16 @@ async function renderTable() {
         if (section === "gastos") {
             let tr = document.createElement("tr");
             if (isMobile) {
-                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
-                    <div style="text-align: center; color: white; margin-bottom: 12px;">
-                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin comercio"}</strong><br>
+                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
+                    <div class="mobileRecordHeader">
+                        <strong>${c.nombre || "Sin comercio"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
+                    <div class="mobileInfoGrid">
                         <div class="mobileCard"><small>DETALLE</small><br><span>${c.producto || "-"}</span></div>
                         <div class="mobileCard gastoMobileAmount"><small>MONTO</small><br><span>${formatCRC(c.costo)}</span></div>
                     </div>
-                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
+                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
                 </td>`;
             } else {
                 tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td class="gastoAmount">${formatCRC(c.costo)}</td><td>${actionButtons(c.id)}</td>`;
@@ -766,34 +766,34 @@ async function renderTable() {
         if (isMobile) {
             if (section === "contado") {
                 const ganancia = (c.precio || 0) - (c.costo || 0);
-                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
-                    <div style="text-align: center; color: white; margin-bottom: 12px;">
-                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin nombre"}</strong><br>
+                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
+                    <div class="mobileRecordHeader">
+                        <strong>${c.nombre || "Sin nombre"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
+                    <div class="mobileInfoGrid">
                         <div class="mobileCard"><small>PRODUCTO</small><br><span>${c.producto || "-"}</span></div>
                         <div class="mobileCard"><small>COSTO</small><br><span>${formatCRC(c.costo)}</span></div>
                         <div class="mobileCard"><small>PRECIO</small><br><span>${formatCRC(c.precio)}</span></div>
                         <div class="mobileCard" style="border:1px solid #FFD700"><small>GANANCIA</small><br><span style="color:#FFD700">${formatCRC(ganancia)}</span></div>
                     </div>
-                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
+                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
                 </td>`;
             } else {
                 const esP = c.section === "prestamos";
                 const planTexto = (c.cuota === "Indefinidas") ? "5% (Indef.)" : "20% (5 Cuotas)";
-                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
-                    <div style="text-align: center; color: white; margin-bottom: 12px;">
-                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin nombre"}</strong><br>
+                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
+                    <div class="mobileRecordHeader">
+                        <strong>${c.nombre || "Sin nombre"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
+                    <div class="mobileInfoGrid">
                         <div class="mobileCard"><small>DETALLE</small><br><span>${esP ? formatCRC(c.prestamo) : (c.producto || "-")}</span></div>
                         <div class="mobileCard"><small>PLAN/PRECIO</small><br><span>${esP ? planTexto : formatCRC(c.precio)}</span></div>
                         <div class="mobileCard"><small>ABONADO</small><br><span>${formatCRC(c.abonado)}</span></div>
                         <div class="mobileCard" style="border:1px solid #4caf50"><small>SALDO</small><br><span style="color:#4caf50">${formatCRC(saldo)}</span></div>
                     </div>
-                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
+                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
                 </td>`;
             }
         } else {
