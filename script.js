@@ -47,6 +47,16 @@ function formatPDF(num) {
     });
 }
 
+function getDiaPago(fecha) {
+    if (!fecha) return "-";
+
+    const date = new Date(`${fecha}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return "-";
+
+    const dias = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+    return dias[date.getDay()];
+}
+
 function getMonthKey(dateStr) {
     if (!dateStr) return "";
     return String(dateStr).slice(0, 7);
@@ -713,7 +723,7 @@ async function renderTable() {
 
     if (mainTable) mainTable.style.display = "table";
 
-    if (section === "prestamos") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Prestamo</th><th>Cuotas</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
+    if (section === "prestamos") thead.innerHTML = `<tr><th>Fecha</th><th>Dia de Pago</th><th>Cliente</th><th>Prestamo</th><th>Cuotas</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
     else if (section === "contado") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Ganancia</th><th>Acciones</th></tr>`;
     else if (section === "gastos") thead.innerHTML = `<tr><th>Fecha</th><th>Comercio</th><th>Detalle</th><th>Monto</th><th>Acciones</th></tr>`;
     else thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Prima</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
@@ -730,16 +740,16 @@ async function renderTable() {
         if (section === "gastos") {
             let tr = document.createElement("tr");
             if (isMobile) {
-                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
-                    <div class="mobileRecordHeader">
-                        <strong>${c.nombre || "Sin comercio"}</strong><br>
+                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
+                    <div style="text-align: center; color: white; margin-bottom: 12px;">
+                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin comercio"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div class="mobileInfoGrid">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
                         <div class="mobileCard"><small>DETALLE</small><br><span>${c.producto || "-"}</span></div>
                         <div class="mobileCard gastoMobileAmount"><small>MONTO</small><br><span>${formatCRC(c.costo)}</span></div>
                     </div>
-                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
                 </td>`;
             } else {
                 tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td class="gastoAmount">${formatCRC(c.costo)}</td><td>${actionButtons(c.id)}</td>`;
@@ -766,38 +776,40 @@ async function renderTable() {
         if (isMobile) {
             if (section === "contado") {
                 const ganancia = (c.precio || 0) - (c.costo || 0);
-                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
-                    <div class="mobileRecordHeader">
-                        <strong>${c.nombre || "Sin nombre"}</strong><br>
+                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
+                    <div style="text-align: center; color: white; margin-bottom: 12px;">
+                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin nombre"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div class="mobileInfoGrid">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
                         <div class="mobileCard"><small>PRODUCTO</small><br><span>${c.producto || "-"}</span></div>
                         <div class="mobileCard"><small>COSTO</small><br><span>${formatCRC(c.costo)}</span></div>
                         <div class="mobileCard"><small>PRECIO</small><br><span>${formatCRC(c.precio)}</span></div>
                         <div class="mobileCard" style="border:1px solid #FFD700"><small>GANANCIA</small><br><span style="color:#FFD700">${formatCRC(ganancia)}</span></div>
                     </div>
-                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
                 </td>`;
             } else {
                 const esP = c.section === "prestamos";
                 const planTexto = (c.cuota === "Indefinidas") ? "5% (Indef.)" : "20% (5 Cuotas)";
-                tr.innerHTML = `<td colspan="100%" class="mobileRecordCell">
-                    <div class="mobileRecordHeader">
-                        <strong>${c.nombre || "Sin nombre"}</strong><br>
+                const diaPagoCard = esP ? `<div class="mobileCard"><small>DIA DE PAGO</small><br><span>${getDiaPago(c.fecha)}</span></div>` : "";
+                tr.innerHTML = `<td colspan="100%" style="padding: 15px 0; border: none; background: transparent;">
+                    <div style="text-align: center; color: white; margin-bottom: 12px;">
+                        <strong style="font-size: 1.4em; letter-spacing: 0.5px;">${c.nombre || "Sin nombre"}</strong><br>
                         <small style="color: #888; font-size: 0.9em;">${c.fecha || "-"}</small>
                     </div>
-                    <div class="mobileInfoGrid">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; box-sizing: border-box; padding: 0 5px;">
+                        ${diaPagoCard}
                         <div class="mobileCard"><small>DETALLE</small><br><span>${esP ? formatCRC(c.prestamo) : (c.producto || "-")}</span></div>
                         <div class="mobileCard"><small>PLAN/PRECIO</small><br><span>${esP ? planTexto : formatCRC(c.precio)}</span></div>
                         <div class="mobileCard"><small>ABONADO</small><br><span>${formatCRC(c.abonado)}</span></div>
                         <div class="mobileCard" style="border:1px solid #4caf50"><small>SALDO</small><br><span style="color:#4caf50">${formatCRC(saldo)}</span></div>
                     </div>
-                    <div class="mobileActionsWrap">${actionButtons(c.id)}</div>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">${actionButtons(c.id)}</div>
                 </td>`;
             }
         } else {
-            if (section === "prestamos") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${formatCRC(c.prestamo)}</td><td>${c.cuota === "Indefinidas" ? c.cuota : formatCRC(c.cuota)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
+            if (section === "prestamos") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${getDiaPago(c.fecha)}</td><td>${c.nombre || "-"}</td><td>${formatCRC(c.prestamo)}</td><td>${c.cuota === "Indefinidas" ? c.cuota : formatCRC(c.cuota)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
             else if (section === "contado") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td>${formatCRC(c.costo)}</td><td>${formatCRC(c.precio)}</td><td>${formatCRC((c.precio || 0) - (c.costo || 0))}</td><td>${actionButtons(c.id)}</td>`;
             else tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td>${formatCRC(c.costo)}</td><td>${formatCRC(c.precio)}</td><td>${formatCRC(c.prima)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
         }
@@ -1244,6 +1256,15 @@ function showSaldo(id) {
         : (c.precio || 0) - (c.prima || 0) - (c.abonado || 0);
 
     activeSaldoClientId = id;
+    const saldoLabels = {
+        saldoFechaLabel: "Fecha ultimo abono:",
+        saldoMontoLabel: "Monto ultimo abono:",
+        saldoPendienteLabel: "Saldo pendiente:"
+    };
+    Object.entries(saldoLabels).forEach(([labelId, labelText]) => {
+        const label = document.getElementById(labelId);
+        if (label) label.textContent = labelText;
+    });
     document.getElementById("saldoFecha").innerText = c.fechaUltimoAbono || "Sin abonos";
     document.getElementById("saldoUltimo").innerText = formatCRC(c.ultimoAbono);
     document.getElementById("saldoPendiente").innerText = formatCRC(s);
@@ -1658,11 +1679,12 @@ async function exportPDF() {
                 styles: { fontSize: 8 }
             });
         } else if (section === "prestamos") {
-            head = [["Fecha", "Cliente", "Prestamo", "Cuotas", "Abonado", "Saldo"]];
+            head = [["Fecha", "Dia de Pago", "Cliente", "Prestamo", "Cuotas", "Abonado", "Saldo"]];
             clients.filter(c => c && c.section === "prestamos").forEach(c => {
                 let saldo = (c.totalPrestamo || 0) - (c.abonado || 0);
                 bodyData.push([
                     c.fecha || "-",
+                    getDiaPago(c.fecha),
                     c.nombre || "-",
                     formatPDF(c.prestamo),
                     c.cuota || "-",

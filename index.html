@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELITE DASHBOARD</title>
     <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -153,15 +156,15 @@
         <div class="saldoCard">
             <button class="saldoClose" onclick="cerrarSaldo()">X</button>
             <div class="saldoRow">
-                <span>Fecha ultimo abono:</span>
+                <span id="saldoFechaLabel">Fecha ultimo abono:</span>
                 <strong id="saldoFecha"></strong>
             </div>
             <div class="saldoRow">
-                <span>Monto ultimo abono:</span>
+                <span id="saldoMontoLabel">Monto ultimo abono:</span>
                 <strong class="saldoGreen" id="saldoUltimo"></strong>
             </div>
             <div class="saldoRow">
-                <span>Saldo pendiente:</span>
+                <span id="saldoPendienteLabel">Saldo pendiente:</span>
                 <strong class="saldoRed" id="saldoPendiente"></strong>
             </div>
             <div class="saldoActions">
