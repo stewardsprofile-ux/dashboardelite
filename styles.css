@@ -4,8 +4,8 @@
     --elite-surface-glass: rgba(8, 9, 12, 0.86);
     --elite-gold: #E6C200;
     --elite-text: #FFFFFF;
-    --elite-text-soft: rgba(255,255,255,0.72);
-    --elite-text-muted: #a0aab4;
+    --elite-text-soft: #FFFFFF;
+    --elite-text-muted: #FFFFFF;
     --elite-dark-text: #08090C;
     --elite-border-gold: rgba(230,194,0,0.38);
     --elite-border-gold-soft: rgba(230,194,0,0.24);
@@ -13,7 +13,7 @@
     --elite-shadow: 0 18px 46px rgba(0,0,0,0.28);
     --elite-shadow-deep: 0 24px 62px rgba(0,0,0,0.34);
     --elite-font: 'Segoe UI', Arial, sans-serif;
-    --elite-display: 'Cinzel', Georgia, serif;
+    --elite-display: 'Segoe UI', Arial, sans-serif;
 }
 
 /* =========================================

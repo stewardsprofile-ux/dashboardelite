@@ -723,7 +723,7 @@ async function renderTable() {
 
     if (mainTable) mainTable.style.display = "table";
 
-    if (section === "prestamos") thead.innerHTML = `<tr><th>Fecha</th><th>Dia de Pago</th><th>Cliente</th><th>Prestamo</th><th>Cuotas</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
+    if (section === "prestamos") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Dia de Pago</th><th>Prestamo</th><th>Cuotas</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
     else if (section === "contado") thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Ganancia</th><th>Acciones</th></tr>`;
     else if (section === "gastos") thead.innerHTML = `<tr><th>Fecha</th><th>Comercio</th><th>Detalle</th><th>Monto</th><th>Acciones</th></tr>`;
     else thead.innerHTML = `<tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Costo</th><th>Precio</th><th>Prima</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr>`;
@@ -809,7 +809,7 @@ async function renderTable() {
                 </td>`;
             }
         } else {
-            if (section === "prestamos") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${getDiaPago(c.fecha)}</td><td>${c.nombre || "-"}</td><td>${formatCRC(c.prestamo)}</td><td>${c.cuota === "Indefinidas" ? c.cuota : formatCRC(c.cuota)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
+            if (section === "prestamos") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${getDiaPago(c.fecha)}</td><td>${formatCRC(c.prestamo)}</td><td>${c.cuota === "Indefinidas" ? c.cuota : formatCRC(c.cuota)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
             else if (section === "contado") tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td>${formatCRC(c.costo)}</td><td>${formatCRC(c.precio)}</td><td>${formatCRC((c.precio || 0) - (c.costo || 0))}</td><td>${actionButtons(c.id)}</td>`;
             else tr.innerHTML = `<td>${c.fecha || "-"}</td><td>${c.nombre || "-"}</td><td>${c.producto || "-"}</td><td>${formatCRC(c.costo)}</td><td>${formatCRC(c.precio)}</td><td>${formatCRC(c.prima)}</td><td>${formatCRC(c.abonado)}</td><td>${formatCRC(saldo)}</td><td>${actionButtons(c.id)}</td>`;
         }
@@ -1679,13 +1679,13 @@ async function exportPDF() {
                 styles: { fontSize: 8 }
             });
         } else if (section === "prestamos") {
-            head = [["Fecha", "Dia de Pago", "Cliente", "Prestamo", "Cuotas", "Abonado", "Saldo"]];
+            head = [["Fecha", "Cliente", "Dia de Pago", "Prestamo", "Cuotas", "Abonado", "Saldo"]];
             clients.filter(c => c && c.section === "prestamos").forEach(c => {
                 let saldo = (c.totalPrestamo || 0) - (c.abonado || 0);
                 bodyData.push([
                     c.fecha || "-",
-                    getDiaPago(c.fecha),
                     c.nombre || "-",
+                    getDiaPago(c.fecha),
                     formatPDF(c.prestamo),
                     c.cuota || "-",
                     formatPDF(c.abonado),
