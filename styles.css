@@ -159,7 +159,7 @@ nav button.active {
     margin: 0;
     color: var(--elite-gold);
     font-size: 1.35rem;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 /* ===== FORMULARIO ===== */
@@ -389,7 +389,11 @@ td {
     background: rgba(8, 9, 12, 0.88);
 }
 
-.gastoMetric p,
+.gastoMetric p {
+    color: var(--elite-gold);
+    font-weight: 400;
+}
+
 .gastoAmount,
 .gastoMobileAmount span {
     color: var(--elite-gold);
@@ -403,7 +407,7 @@ td {
 
 .positiveMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .goldMetric {
@@ -414,7 +418,7 @@ td {
 
 .goldMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .yellowMetric {
@@ -424,7 +428,7 @@ td {
 
 .yellowMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .orangeMetric {
@@ -434,7 +438,7 @@ td {
 
 .orangeMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .blueMetric {
@@ -444,7 +448,7 @@ td {
 
 .blueMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .skyMetric {
@@ -454,7 +458,7 @@ td {
 
 .skyMetric p {
     color: var(--elite-gold);
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .accionesBtns {
@@ -1083,6 +1087,10 @@ button[onclick="exportPDF()"]:hover,
 .mobileCard.gastoMobileAmount span,
 #resumenStockContainer .metricBox p {
     color: var(--elite-gold) !important;
+}
+
+.generalNumbers .metricBox p {
+    font-weight: 400 !important;
 }
 
 .mobileCard[style],
